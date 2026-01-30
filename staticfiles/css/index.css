@@ -1,0 +1,582 @@
+/* =========================
+   HERO SECTION
+========================= */
+.hero-section {
+    /* padding: 100px 0 80px; */
+    background: #fff5f6;
+}
+
+.hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 46px;
+    font-weight: 700;
+    color: #111827;
+}
+
+.hero-title span {
+    color: #e63946;
+}
+
+.hero-text {
+    font-size: 16px;
+    color: #4b5563;
+    margin: 20px 0 30px;
+}
+
+.hero-image {
+    max-width: 100%;
+    border-radius: 18px;
+}
+
+.hero-actions {
+    display: flex;
+    gap: 18px;
+    flex-wrap: wrap;
+}
+
+
+
+
+.hero-section .btn {
+    padding: 16px 28px;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 999px;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* PRIMARY */
+.hero-section .rentify-btn {
+    background: linear-gradient(135deg, #e63946, #ff4d6d);
+    color: #ffffff;
+    border: none;
+    box-shadow: 0 12px 28px rgba(230, 57, 70, 0.35);
+}
+
+/* shine */
+.hero-section .rentify-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.35),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+.hero-section .rentify-btn:hover::after {
+    left: 120%;
+}
+
+.hero-section .rentify-btn:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 40px rgba(230, 57, 70, 0.45);
+}
+
+/* SECONDARY */
+.hero-section .rentify-btn-outline {
+    background: transparent;
+    color: #e63946;
+    border: 1.6px solid #e63946;
+}
+
+.hero-section .rentify-btn-outline::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: #e63946;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+}
+
+.hero-section .rentify-btn-outline:hover::before {
+    transform: scaleX(1);
+}
+
+.hero-section .rentify-btn-outline:hover {
+    color: #ffffff;
+    transform: translateY(-3px);
+    box-shadow: 0 16px 34px rgba(230, 57, 70, 0.35);
+}
+
+
+/* ================= MOBILE ================= */
+@media (max-width: 768px) {
+    .hero-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .hero-actions .btn {
+        width: 90%;
+        max-width: 320px;
+        text-align: center;
+    }
+      .hero-actions .btn {
+        margin: 0 !important;   /* removes me-3 effect */
+    }
+}
+
+
+
+@media (max-width: 768px) {
+    .hero-section .row {
+        text-align: center;
+    }
+
+    /* 🔥 IMAGE FIRST */
+    .hero-section .col-lg-4 {
+        order: 1;
+        margin-bottom: 35px;
+    }
+
+    /* TEXT AFTER IMAGE */
+    .hero-section .col-lg-8 {
+        order: 2;
+    }
+
+    .hero-title {
+        font-size: 34px;
+        line-height: 1.2;
+        margin-bottom: 14px;
+    }
+
+    .hero-title span {
+        display: block;
+        color: #ff4d6d;
+    }
+
+    .hero-text {
+        font-size: 16px;
+        color: #555;
+        margin-bottom: 26px;
+        padding: 0 10px;
+    }
+
+    /* Buttons stacked */
+    .hero-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: center;
+    }
+
+    .hero-actions .btn {
+        width: 100%;
+        max-width: 320px;
+        padding: 14px;
+        font-size: 15px;
+    }
+
+    /* Image styling */
+    .hero-image {
+        width: 85%;
+        max-width: 320px;
+        height: 420px;
+        object-fit: cover;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+    }
+}
+/* =========================
+   TRUST SECTION
+========================= */
+.trust-section {
+    padding: 60px 0;
+    background: #ffffff;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+.trust-section .col-6,
+.trust-section .col-md-3 {
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    padding: 24px 10px;
+    border-radius: 14px;
+}
+
+/* Number */
+.trust-number {
+    font-size: 34px;
+    font-weight: 700;
+    color: #e63946;
+    margin-bottom: 6px;
+    transition: color 0.3s ease;
+}
+
+/* Text */
+.trust-text {
+    font-size: 14px;
+    color: #6b7280;
+    margin: 0;
+    transition: color 0.3s ease;
+}
+
+/* =========================
+   HOVER EFFECT
+========================= */
+.trust-section .col-6:hover,
+.trust-section .col-md-3:hover {
+
+    transform: translateY(-6px);
+    background: #fff5f6;
+    box-shadow: 0 14px 30px rgba(230, 57, 70, 0.15);
+}
+
+.trust-section .col-6:hover .trust-number,
+.trust-section .col-md-3:hover .trust-number {
+    color: #d62839;
+}
+
+.trust-section .col-6:hover .trust-text,
+.trust-section .col-md-3:hover .trust-text {
+    color: #374151;
+}
+
+/* =========================
+   SECTIONS
+========================= */
+
+
+/* =========================
+   HOW IT WORKS
+========================= */
+.how-section {
+    padding: 70px 0;
+}
+
+.how-card {
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+}
+
+.how-card span {
+    display: inline-block;
+    background: #e63946;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    line-height: 36px;
+    margin-bottom: 12px;
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+.category-section {
+    padding: 70px 0;
+    background: #fff0f2;
+}
+
+.category-card {
+    background: #ffffff;
+    padding: 40px 20px;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+}
+
+/* =========================
+   CTA
+========================= */
+.cta-section {
+    padding: 80px 0;
+    background: #e63946;
+    color: #ffffff;
+}
+
+.cta-section h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+.cta-section p {
+    opacity: 0.9;
+}
+
+/* =========================
+   ABOUT SECTION
+========================= */
+.about-section {
+    padding: 80px 0;
+    background: #ffffff;
+}
+
+.about-section .section-heading {
+    text-align: left;
+    font-size: 34px;
+    margin-bottom: 18px;
+    color: #111827;
+}
+
+.about-text {
+    font-size: 16px;
+    color: #4b5563;
+    line-height: 1.7;
+    margin-bottom: 16px;
+}
+
+.about-points {
+    list-style: none;
+    padding: 0;
+    margin-top: 18px;
+}
+
+.about-points li {
+    font-size: 15px;
+    color: #111827;
+    margin-bottom: 10px;
+}
+
+/* Image */
+.about-image {
+    width: 100%;
+    max-width: 420px;
+    height: 520px;
+    object-fit: cover;
+    border-radius: 18px;
+    box-shadow: 0 14px 40px rgba(0,0,0,0.12);
+    transition: transform 0.4s ease;
+}
+
+.about-image:hover {
+    transform: translateY(-6px);
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+
+    .about-section {
+        padding: 50px 0;
+        text-align: center;
+        ;
+        
+    }
+
+    .about-section .section-heading {
+        text-align: center;
+        font-size: 28px;
+        margin-top:50px;
+    }
+
+    .about-text {
+        font-size: 15px;
+        padding: 0 10px;
+    }
+
+    .about-image {
+        height: 420px;
+        margin-top: 30px;
+    }
+}
+
+.section-heading {
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 32px;
+    margin-bottom: 10px;
+}
+
+/* =========================
+   TRUST
+========================= */
+.trust-section {
+    padding: 60px 0;
+    background: #ffffff;
+}
+
+.trust-section h5 {
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* Optional hover for trust items */
+.trust-section .col-md-3,
+.trust-section .col-6 {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 14px;
+}
+
+.trust-section .col-md-3:hover,
+.trust-section .col-6:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 30px rgba(230, 57, 70, 0.15);
+    background: #fff5f6;
+}
+
+/* =========================
+   HOW IT WORKS
+========================= */
+.how-section {
+    padding: 70px 0;
+}
+
+.how-card {
+    background: #ffffff;
+    padding: 30px 20px;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+    text-align: center;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+.how-card span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background: #e63946;
+    color: #fff;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+/* Hover */
+.how-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(230, 57, 70, 0.18);
+}
+
+
+.section-subtitle {
+    text-align: center;
+    font-size: 15px;
+    font-weight: 500;
+    color: #6b7280;
+    max-width: 520px;
+    margin: 0 auto 40px;
+    line-height: 1.6;
+    position: relative;
+}
+
+/* subtle decorative line */
+.section-subtitle::after {
+    content: "";
+    display: block;
+    width: 60px;
+    height: 3px;
+    background: #e63946;
+    margin: 14px auto 0;
+    border-radius: 6px;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .section-subtitle {
+        font-size: 14px;
+        padding: 0 14px;
+        margin-bottom: 30px;
+    }
+}
+
+/* =========================
+   CATEGORIES
+========================= */
+.category-section {
+    padding: 70px 0;
+    background: #fff0f2;
+}
+
+.category-card {
+    background: #ffffff;
+    padding: 40px 20px;
+    border-radius: 16px;
+    text-align: center;
+    font-weight: 600;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.06);
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* Hover */
+.category-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 36px rgba(230, 57, 70, 0.2);
+}
+
+/* =========================
+   CTA
+========================= */
+.cta-section {
+    padding: 80px 0;
+    background: #e63946;
+    color: #ffffff;
+    text-align: center;
+}
+
+.cta-section h2 {
+    font-family: 'Playfair Display', serif;
+}
+
+.cta-section p {
+    opacity: 0.9;
+}
+
+
+/* CTA BUTTON ONLY */
+.cta-section .rentify-btn {
+    background: linear-gradient(135deg, #ffffff, #ffe3e8);
+    color: #e63946;
+    padding: 16px 34px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 999px;
+    border: none;
+    box-shadow: 0 14px 30px rgba(0, 0, 0, 0.18);
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+/* subtle glow sweep */
+.cta-section .rentify-btn::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -120%;
+    width: 120%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255, 255, 255, 0.6),
+        transparent
+    );
+    transition: 0.6s;
+}
+
+.cta-section .rentify-btn:hover::after {
+    left: 120%;
+}
+
+/* Hover */
+.cta-section .rentify-btn:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+    color: #e63946;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+    .cta-section .rentify-btn {
+        width: 90%;
+        max-width: 320px;
+        padding: 15px;
+        font-size: 15px;
+    }
+}

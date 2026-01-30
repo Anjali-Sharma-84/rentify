@@ -1,0 +1,80 @@
+/* ================= SELLER PROFILE MODAL ================= */
+
+.modal-content {
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+/* Header */
+.modal-header {
+    padding: 1.25rem 1.5rem;
+}
+
+.modal-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+/* Body */
+.modal-body {
+    padding: 1.25rem 1.5rem;
+}
+
+/* Section headings */
+.modal-body h6 {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Inputs */
+.modal-body input {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+    margin-bottom: 10px;
+}
+
+.modal-body input:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+    outline: none;
+}
+
+/* Divider */
+.modal-body hr {
+    margin: 1rem 0;
+    opacity: 0.15;
+}
+
+/* Footer */
+.modal-footer {
+    padding: 1rem 1.5rem;
+}
+
+/* Buttons */
+.modal-footer .btn-outline-secondary {
+    border-radius: 10px;
+    padding: 6px 18px;
+}
+
+.modal-footer .btn-danger {
+    border-radius: 10px;
+    padding: 6px 22px;
+    font-weight: 600;
+}
+
+/* Close button */
+.btn-close {
+    box-shadow: none !important;
+}
+
+/* Small screens */
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 1rem;
+    }
+}
+

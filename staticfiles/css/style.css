@@ -1,0 +1,341 @@
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #fff5f6; /* soft pink background */
+    color: #1f2937;
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* =========================
+   CUSTOM SCROLLBAR (WEBKIT)
+========================= */
+
+/* Width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #fff0f2;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: linear-gradient(
+        180deg,
+        #ff6b81,
+        #e63946
+    );
+    border-radius: 10px;
+    border: 2px solid #fff0f2;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(
+        180deg,
+        #e63946,
+        #d62839
+    );
+}
+
+/* =========================
+   SELECTION COLOR
+========================= */
+::selection {
+    background: rgba(230, 57, 70, 0.25);
+    color: #111827;
+}
+
+html, body {
+    overflow-x: hidden;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+.rentify-navbar {
+    background: #ffffff;
+    padding: 16px 0;
+    border-bottom: 1px solid #f1f1f1;
+    box-shadow: 5px 8px 8px rgba(0, 0, 0, 0.04);
+}
+
+.rentify-logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #e63946;
+}
+
+.navbar-nav .nav-link {
+    position: relative;
+    font-size: 15px;
+    font-weight: 500;
+    color: #374151;
+    margin: 0 14px;
+    padding: 4px 0;
+}
+
+.navbar-nav .nav-link::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -8px;
+    width: 0%;
+    height: 2px;
+    background-color: #e63946;
+    transition: width 0.25s ease;
+}
+
+.navbar-nav .nav-link:hover::after,
+.navbar-nav .nav-link.active::after {
+    width: 100%;
+}
+
+/* =========================
+   BUTTONS
+========================= */
+/* =========================
+   BASE BUTTONS
+========================= */
+
+.rentify-btn {
+    background-color: #e63946;
+    color: #ffffff;
+    border-radius: 999px;
+    padding: 10px 22px;
+    border: none;
+    transition: background-color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s ease;
+}
+
+.rentify-btn:hover {
+    background-color: #d62839;
+    color: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(230, 57, 70, 0.25);
+}
+
+/* =========================
+   OUTLINE BUTTON
+========================= */
+
+.rentify-btn-outline {
+    background: transparent;
+    color: #e63946;
+    border: 1px solid #e63946;
+    border-radius: 999px;
+    padding: 10px 22px;
+    transition: background-color 0.25s ease,
+                color 0.25s ease,
+                box-shadow 0.25s ease,
+                transform 0.25s ease;
+}
+
+.rentify-btn-outline:hover {
+    background-color: rgba(230, 57, 70, 0.08);
+    color: #e63946;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(230, 57, 70, 0.15);
+}
+
+
+/* =========================
+   PAGE OFFSET
+========================= */
+.page-wrapper {
+    padding-top: 100px;
+}
+
+/* =========================
+   FOOTER
+========================= */
+.rentify-footer {
+    padding: 30px 0;
+    border-top: 1px solid #f1f1f1;
+    color: #6b7280;
+}
+
+/* =========================
+   MOBILE SIDEBAR
+========================= */
+@media (max-width: 991px) {
+
+    #mobileOverlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.25);
+        z-index: 3000;
+        display: none;
+    }
+
+    #mobileOverlay.show {
+        display: block;
+    }
+
+    .mobile-sidebar {
+        position: fixed;
+        top: 0;
+        left: -280px;
+        width: 280px;
+        height: 100vh;
+        background: #ffffff;
+        padding: 24px 20px;
+        z-index: 4000;
+        transition: left 0.35s ease;
+    }
+
+    .mobile-sidebar.show {
+        left: 0;
+    }
+
+    .sidebar-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .close-btn {
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    .mobile-sidebar a {
+        text-decoration: none;
+        position: relative;
+        display: block;
+        padding: 14px 0;
+        font-size: 16px;
+        color: #374151;
+        border-bottom: 1px solid #f1f1f1;
+    }
+
+    .mobile-sidebar a::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        bottom: 6px;
+        width: 0%;
+        height: 2px;
+        background-color: #e63946;
+        transition: width 0.25s ease;
+    }
+
+    .mobile-sidebar a.active::after,
+    .mobile-sidebar a:hover::after {
+        width: 100%;
+    }
+}
+
+/* =========================
+   RENTIFY ALERTS
+========================= */
+.rentify-alert-wrapper {
+    position: fixed;
+    top: 90px; /* below navbar */
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3000;
+    width: 90%;
+    max-width: 420px;
+}
+
+.rentify-alert {
+    background: linear-gradient(135deg, #e63946, #ff4d6d);
+    color: #ffffff;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 14px;
+    font-weight: 500;
+    box-shadow: 0 12px 30px rgba(230, 57, 70, 0.35);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    animation: slideDown 0.35s ease;
+    margin-bottom: 10px;
+}
+
+.rentify-alert-error {
+    background: linear-gradient(135deg, #111827, #1f2937);
+}
+
+.rentify-alert-success {
+    background: linear-gradient(135deg, #e63946, #ff4d6d);
+}
+
+.close-alert {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+/* Animation */
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+.close-btn {
+  position: absolute;
+  top: 12px;
+  right: 18px;
+  font-size: 26px;
+  color: #ff3b5c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.close-btn:hover {
+  color: #d62845;
+}
+.auth-wrapper {
+  min-height: 100vh;
+  background: #fff5f7;
+}
+
+.auth-card {
+  border-radius: 22px;
+  padding: 35px;
+  box-shadow: 0 20px 40px rgba(255, 0, 80, 0.12);
+}
+
+.auth-title {
+  color: #ff3b5c;
+  font-weight: 700;
+  font-size: 30px;
+}
+
+.auth-sub {
+  color: #777;
+  margin-bottom: 25px;
+}
+
+.close-btn {
+  position: absolute;
+  top: 15px;
+  right: 20px;
+  font-size: 26px;
+  color: #ff3b5c;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.close-btn:hover {
+  color: #d62845;
+}
