@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Rent Clothes | Rentify{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+
+    <!-- ================= HEADER ================= -->
+    <div class="mb-4">
+        <form method="get"
+                  class="search-bar d-flex gap-2 align-items-center mb-3">
+                <input type="text"
+                       name="pincode"
+                       id="pincodeInput"
+                       class="form-control"
+                       placeholder="Enter pincode"
+                       maxlength="6">
+                <button type="submit"
+                        class="btn btn-danger px-4">
+                    Search
+                </button>
+            </form>
+        <h3 class="fw-bold">Rent Premium Clothes</h3>
+
+        {% if not user.is_authenticated %}
+            <p class="text-muted">
+                Explore our collection. Login to rent.
+            </p>
+
+            <!-- PINCODE SEARCH -->
+            
+
+        {% elif user.is_buyer %}
+            <p class="text-muted">
+                Choose clothes and send rental requests.
+            </p>
+        {% else %}
+            <div class="alert alert-warning mt-3">
+                Sellers cannot rent clothes.
+            </div>
+        {% endif %}
+    </div>
+
+    <!-- ================= CATEGORY FILTER ================= -->
+    <div class="category-filter mb-4">
+        <a href="?category=all"
+           class="filter-pill {% if selected_category == 'all' %}active{% endif %}">
+            All
+        </a>
+
+        {% for cat in categories %}
+        <a href="?category={{ cat.id }}"
+           class="filter-pill {% if selected_category == cat.id|stringformat:'s' %}active{% endif %}">
+            {{ cat.name }}
+        </a>
+        {% endfor %}
+    </div>
+
+    <!-- ================= CLOTH GRID ================= -->
+    <div class="row g-4 cloth-grid">
+
+        {% for cloth in clothes %}
+        <div class="col-lg-3 col-md-4 col-sm-6">
+
+            <div class="card cloth-card border-0 shadow-sm">
+
+                <!-- IMAGE -->
+                <div class="cloth-image-wrapper">
+                    <img src="{{ cloth.image.url }}"
+                         alt="{{ cloth.name }}"
+                         loading="lazy">
+                </div>
+
+                <div class="card-body">
+
+                    <!-- NAME -->
+                    <h6 class="cloth-title">
+                        {{ cloth.name }}
+                    </h6>
+
+                    <!-- AVAILABILITY CHIP -->
+                    {% if cloth.is_available %}
+                        <span class="availability-chip available">
+                            Available
+                        </span>
+                    {% else %}
+                        <span class="availability-chip unavailable">
+                            Unavailable
+                        </span>
+                    {% endif %}
+
+                    <!-- CATEGORIES -->
+                    <p class="cloth-category mt-2 mb-1">
+                        {% for cat in cloth.categories.all %}
+                            <span class="badge bg-light text-dark me-1">
+                                {{ cat.name }}
+                            </span>
+                        {% endfor %}
+                    </p>
+
+                    <!-- PRICE -->
+                    <p class="cloth-price mb-3">
+                        ₹{{ cloth.rent_per_day }} <span>/ day</span>
+                    </p>
+
+                    <!-- ACTION BUTTON -->
+                    {% if user.is_authenticated and user.is_buyer %}
+
+                        {% if cloth.is_available %}
+                            <a href="{% url 'cloth_detail' cloth.id %}"
+                               class="btn btn-danger btn-sm w-100">
+                                View Details
+                            </a>
+                        {% else %}
+                            <button class="btn btn-secondary btn-sm w-100"
+                                    disabled>
+                                Not Available
+                            </button>
+                        {% endif %}
+
+                    {% else %}
+                        <a href="{% url 'login' %}"
+                           class="btn btn-outline-danger btn-sm w-100">
+                            Login to Rent
+                        </a>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12 text-center text-muted">
+            No clothes available right now.
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+
+<!-- CLEAR PINCODE AFTER SEARCH -->
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has("pincode")) {
+        const input = document.getElementById("pincodeInput");
+        if (input) input.value = "";
+    }
+});
+</script>
+
+{% endblock %}

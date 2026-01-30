@@ -1,0 +1,173 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Register | Rentify{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <div class="auth-card">
+
+                <h3 class="auth-title">Create Your Account</h3>
+                <p class="auth-subtitle">Rent or list premium fashion effortlessly</p>
+
+                <!-- Role Selection -->
+                <div class="role-toggle mb-4">
+                    <button type="button" class="role-btn active" onclick="selectRole('buyer')">Buyer</button>
+                    <button type="button" class="role-btn" onclick="selectRole('seller')">Seller</button>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <!-- hidden role -->
+                    <input type="hidden" name="role" id="role" value="buyer">
+
+                    <!-- ================= COMMON USER FIELDS ================= -->
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label>Full Name</label>
+                            <input type="text" name="full_name" class="form-control auth-input" placeholder="John Doe" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Email</label>
+                            <input type="email" name="email" class="form-control auth-input" placeholder="john@example.com" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Contact Number</label>
+                            <input type="text" name="contact" class="form-control auth-input" placeholder="10 digit number" required>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            <label>Password</label>
+                            <input type="password" name="password" class="form-control auth-input" required>
+                        </div>
+                    </div>
+
+                    <!-- ================= SELLER ONLY ================= -->
+                    <!-- ================= SELLER ONLY ================= -->
+<div id="seller-fields" style="display:none;">
+    <hr>
+    <h6 class="section-title">Seller Details</h6>
+
+    <div class="mb-3">
+        <label>Store / Display Name</label>
+        <input type="text"
+               name="store_name"
+               class="form-control auth-input"
+               placeholder="e.g. Fashion Hub">
+
+        <div class="helper-text">
+            If you’re an individual seller, leave this blank —
+            we’ll use your name with “Wardrobe”.
+        </div>
+    </div>
+</div>
+
+
+                    <!-- ================= ADDRESS ================= -->
+                    <hr>
+                    <h6 class="section-title">Address</h6>
+
+                    <div class="mb-3">
+                        <label>Building / Street</label>
+                        <input type="text" name="building" class="form-control auth-input" placeholder="Flat, Street, Area" required>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label>Pincode</label>
+                            <input type="text"
+                                   name="pincode"
+                                   id="pincode"
+                                   class="form-control auth-input"
+                                   placeholder="6 digit pincode"
+                                   onkeyup="fetchAddress()"
+                                   required>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>Taluka</label>
+                            <input type="text" name="taluka" id="taluka" class="form-control auth-input" readonly>
+                        </div>
+
+                        <div class="col-md-4 mb-3">
+                            <label>City</label>
+                            <input type="text" name="city" id="city" class="form-control auth-input" readonly>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label>State</label>
+                        <input type="text" name="state" id="state" class="form-control auth-input" readonly>
+                    </div>
+
+                    <button class="btn rentify-btn w-100 mt-4">
+                        Create Account
+                    </button>
+                </form>
+
+                <p class="text-center mt-3 auth-footer">
+                    Already have an account?
+                    <a href="{% url 'login' %}">Login</a>
+                </p>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ================= JAVASCRIPT ================= -->
+<script>
+function selectRole(role) {
+    document.getElementById("role").value = role;
+
+    document.querySelectorAll('.role-btn').forEach(btn => btn.classList.remove('active'));
+
+    if (role === 'seller') {
+        document.getElementById('seller-fields').style.display = 'block';
+        document.querySelectorAll('.role-btn')[1].classList.add('active');
+    } else {
+        document.getElementById('seller-fields').style.display = 'none';
+        document.querySelectorAll('.role-btn')[0].classList.add('active');
+    }
+}
+
+function fetchAddress() {
+    const pincode = document.getElementById("pincode").value;
+
+    if (pincode.length === 6) {
+        fetch(`https://api.postalpincode.in/pincode/${pincode}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data[0].Status === "Success") {
+                    const po = data[0].PostOffice[0];
+                    document.getElementById("taluka").value = po.District;
+                    document.getElementById("city").value = po.Block || po.District;
+                    document.getElementById("state").value = po.State;
+                } else {
+                    clearAddress();
+                }
+            })
+            .catch(clearAddress);
+    } else {
+        clearAddress();
+    }
+}
+
+function clearAddress() {
+    document.getElementById("taluka").value = "";
+    document.getElementById("city").value = "";
+    document.getElementById("state").value = "";
+}
+</script>
+
+{% endblock %}

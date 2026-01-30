@@ -1,0 +1,363 @@
+{% extends "base.html" %}
+{% block title %}My Rentals | Rentify{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+
+    
+<div class="row g-4 mb-5 align-items-stretch">
+
+    <!-- BUYER PROFILE CARD -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-4">
+
+                <!-- NAME -->
+                <h5 class="fw-bold mb-2">
+                    {{ user.get_full_name|default:user.username }}
+                </h5>
+
+                <span class="badge bg-secondary mb-3">
+                    Buyer
+                </span>
+
+                <hr class="my-3">
+
+                <!-- EMAIL -->
+                <p class="mb-2 d-flex align-items-center gap-2">
+                    <i class="fas fa-envelope text-primary"></i>
+                    <span>{{ user.email }}</span>
+                </p>
+
+                <!-- PHONE -->
+                {% if user.contact %}
+                <p class="mb-2 d-flex align-items-center gap-2">
+                    <i class="fas fa-phone text-danger"></i>
+                    <span>{{ user.contact }}</span>
+                </p>
+                {% endif %}
+
+                <!-- ADDRESS -->
+                {% if address %}
+                <p class="mb-1 d-flex align-items-start gap-2">
+                    <i class="fas fa-map-marker-alt text-danger mt-1"></i>
+                    <span>
+                        {{ address.building }}<br>
+                        {{ address.city }}, {{ address.taluka }},
+                        {{ address.state }} – {{ address.pincode }}
+                    </span>
+                </p>
+                {% else %}
+                <p class="text-muted small">
+                    Address not added
+                </p>
+                {% endif %}
+
+                <!-- EDIT BUTTON -->
+                <button class="btn btn-outline-primary btn-sm mt-3"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editProfileModal">
+                    Edit Profile
+                </button>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- MAP CARD -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 h-100 overflow-hidden">
+
+            {% if full_address %}
+            <iframe
+                width="100%"
+                height="100%"
+                style="border:0; min-height:320px"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q={{ full_address|urlencode }}&output=embed">
+            </iframe>
+            {% else %}
+            <div class="p-4 text-center text-muted">
+                Location not available
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+</div>
+
+
+    <!-- ================= RENT REQUESTS ================= -->
+    <h3 class="fw-bold mb-4">My Rental Requests</h3>
+
+    <div class="row g-4">
+    {% for req in requests %}
+
+        <div class="col-lg-4 col-md-6">
+            <div class="card h-100 shadow-sm border-0 rounded-4">
+
+                <div class="card-body">
+
+                    <!-- HEADER -->
+                    <div class="d-flex justify-content-between align-items-start">
+
+                        <img src="{{ req.cloth.image.url }}"
+                             class="rounded"
+                             style="width:80px;height:80px;object-fit:cover;">
+
+                        <div class="flex-grow-1 ms-3">
+                            <h6 class="fw-bold mb-1">
+                                {{ req.cloth.name }}
+                            </h6>
+
+                            <p class="text-muted small mb-1">
+                                Quantity: {{ req.quantity }} |
+                                ₹{{ req.cloth.rent_per_day }}/day
+                            </p>
+
+                            <p class="text-muted small mb-1">
+                                Duration: {{ req.total_days }} day{{ req.total_days|pluralize }}
+                            </p>
+
+                            <p class="fw-bold text-danger mb-1">
+                                Total: ₹{{ req.total_price }}
+                            </p>
+
+                            <p class="text-muted small">
+                                {{ req.start_date }} → {{ req.end_date }}
+                            </p>
+                        </div>
+
+                        <!-- STATUS -->
+                        <span class="badge
+                            {% if req.status == 'pending' %}bg-warning
+                            {% elif req.status == 'approved' %}bg-success
+                            {% elif req.status == 'rejected' %}bg-danger
+                            {% elif req.status == 'cancelled' %}bg-secondary
+                            {% endif %}">
+                            {{ req.status|title }}
+                        </span>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    {% if req.status == "pending" %}
+                    <div class="mt-3 d-flex gap-2">
+
+                        <button class="btn btn-sm btn-outline-primary flex-fill"
+                                data-bs-toggle="modal"
+                                data-bs-target="#editRequestModal{{ req.id }}">
+                            Edit
+                        </button>
+
+                        <form method="post"
+                              action="{% url 'cancel_rent_request' req.id %}"
+                              class="flex-fill">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger w-100">
+                                Cancel
+                            </button>
+                        </form>
+
+                    </div>
+
+                    {% elif req.status == "approved" %}
+                    <div class="mt-3">
+                        <form method="post"
+                              action="{% url 'cancel_rent_request' req.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-sm btn-outline-danger w-100">
+                                Cancel
+                            </button>
+                        </form>
+                    </div>
+
+                    {% elif req.status == "cancelled" or req.status == "rejected" %}
+                    <div class="mt-3">
+                        <form method="post"
+                              action="{% url 'delete_rent_request' req.id %}">
+                            {% csrf_token %}
+                            <button type="submit"
+                                    class="btn btn-sm btn-danger w-100">
+                                Delete
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= EDIT RENT REQUEST MODAL ================= -->
+        {% if req.status == "pending" %}
+        <div class="modal fade" id="editRequestModal{{ req.id }}" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content border-0 shadow rounded-4">
+
+                    <div class="modal-header border-0">
+                        <h5 class="modal-title fw-bold">
+                            Edit Rental Request
+                        </h5>
+                        <button type="button"
+                                class="btn-close"
+                                data-bs-dismiss="modal"></button>
+                    </div>
+
+                    <form method="post"
+                          action="{% url 'edit_rent_request' req.id %}">
+                        {% csrf_token %}
+
+                        <div class="modal-body">
+
+                            <p class="fw-semibold mb-3">
+                                {{ req.cloth.name }}
+                            </p>
+
+                            <div class="mb-3">
+                                <label class="form-label">Quantity</label>
+                                <input type="number"
+                                       name="quantity"
+                                       class="form-control"
+                                       value="{{ req.quantity }}"
+                                       min="1"
+                                       required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">Start Date</label>
+                                <input type="date"
+                                       name="start_date"
+                                       class="form-control"
+                                       value="{{ req.start_date|date:'Y-m-d' }}"
+                                       required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label">End Date</label>
+                                <input type="date"
+                                       name="end_date"
+                                       class="form-control"
+                                       value="{{ req.end_date|date:'Y-m-d' }}"
+                                       required>
+                            </div>
+
+                        </div>
+
+                        <div class="modal-footer border-0">
+                            <button type="button"
+                                    class="btn btn-outline-secondary"
+                                    data-bs-dismiss="modal">
+                                Close
+                            </button>
+
+                            <button type="submit"
+                                    class="btn btn-danger">
+                                Update Request
+                            </button>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
+    {% empty %}
+        <div class="col-12 text-center text-muted">
+            No rental requests yet.
+        </div>
+    {% endfor %}
+    </div>
+
+</div>
+
+<!-- ================= EDIT BUYER PROFILE MODAL ================= -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    Edit Profile
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+
+                <div class="modal-body">
+
+                    <h6 class="fw-semibold mb-2">Basic Details</h6>
+                    {{ user_form.first_name }}
+                    {{ user_form.last_name }}
+                    {{ user_form.contact }}
+
+                    <hr>
+
+                    <h6 class="fw-semibold mb-2">Address</h6>
+
+                    <input type="text" name="building"
+                           class="form-control mb-2"
+                           placeholder="Building / Landmark"
+                           value="{{ address.building|default:'' }}">
+
+                    <input type="text" name="taluka"
+                           class="form-control mb-2"
+                           placeholder="Taluka"
+                           value="{{ address.taluka|default:'' }}">
+
+                    <input type="text" name="city"
+                           class="form-control mb-2"
+                           placeholder="City"
+                           value="{{ address.city|default:'' }}">
+
+                    <input type="text" name="state"
+                           class="form-control mb-2"
+                           placeholder="State"
+                           value="{{ address.state|default:'' }}">
+
+                    <input type="text" name="pincode"
+                           class="form-control"
+                           placeholder="Pincode"
+                           maxlength="6"
+                           value="{{ address.pincode|default:'' }}">
+
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Save Changes
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll("form[action*='delete']").forEach(form => {
+    form.addEventListener("submit", function (e) {
+        if (!confirm("Are you sure you want to permanently delete this request?")) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+
+{% endblock %}

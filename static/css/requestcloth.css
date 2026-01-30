@@ -1,0 +1,122 @@
+
+.card {
+    border-radius: 18px;
+}
+
+/* ---------- Cloth Summary Card ---------- */
+.card img {
+    border-radius: 14px;
+    
+}
+
+.card h5 {
+    font-size: 1.1rem;
+}
+
+.card p {
+    font-size: 0.95rem;
+}
+
+/* ---------- Rent Form ---------- */
+.form-label {
+    font-weight: 600;
+    font-size: 0.85rem;
+}
+
+.form-control,
+textarea {
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.9rem;
+}
+
+.form-control:focus,
+textarea:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 0.15rem rgba(220, 53, 69, 0.15);
+}
+
+/* Alert note */
+.alert-light {
+    background: #f9fafb;
+    border-radius: 12px;
+}
+
+/* Submit button */
+.btn-danger {
+    border-radius: 12px;
+    font-weight: 600;
+    padding: 10px;
+}
+
+/* ---------- Pickup Location Card ---------- */
+.pickup-card {
+    margin-left: auto;
+    max-width: 720px;
+}
+
+.pickup-card h6 {
+    font-size: 0.95rem;
+}
+
+.pickup-card p {
+    font-size: 0.85rem;
+}
+
+/* Map */
+.pickup-card iframe {
+    border-radius: 16px;
+}
+
+/* ---------- Desktop Alignment ---------- */
+@media (min-width: 768px) {
+    .pickup-card {
+        margin-left: auto;
+    }
+}
+
+/* ---------- Mobile ---------- */
+@media (max-width: 767px) {
+    .pickup-card {
+        margin-left: 0;
+        max-width: 100%;
+    }
+}
+/* ================= REQUEST RENT ALIGNMENT ================= */
+
+/* Ensure both cards stretch equally */
+.rent-card {
+    height: 100%;
+    border-radius: 18px;
+}
+
+/* Section headings */
+.section-title {
+    font-size: 0.95rem;
+    color: #374151;
+    letter-spacing: 0.3px;
+}
+
+/* Make image not break height */
+.rent-card img {
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+/* Better vertical spacing inside cards */
+.rent-card p {
+    font-size: 0.95rem;
+}
+
+/* Button alignment */
+.rent-card .btn-danger {
+    margin-top: auto;
+}
+
+/* Desktop balance */
+@media (min-width: 768px) {
+    .rent-card {
+        display: flex;
+        flex-direction: column;
+    }
+}

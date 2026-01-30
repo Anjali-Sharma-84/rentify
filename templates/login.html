@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Login | Rentify{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<div class="login-wrapper">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-5 col-md-7">
+                <div class="login-card">
+
+                    <h3 class="login-title">Welcome Back</h3>
+                    <p class="login-subtitle">
+                        Login to continue renting premium fashion
+                    </p>
+                    <form method="post">
+                        {% csrf_token %}
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input type="email"
+                                   name="email"
+                                   class="form-control login-input"
+                                   placeholder="you@example.com"
+                                   required>
+                        </div>
+
+                        <div class="mb-3 position-relative">
+    <label>Password</label>
+    <input type="password"
+           id="loginPass"
+           name="password"
+           class="form-control login-input"
+           placeholder="••••••••"
+           required>
+    <span class="eye-btn-login" onclick="toggleLoginPass()">👁</span>
+</div>
+
+
+                        <button class="btn rentify-btn w-100 mt-3">
+                            Login
+                        </button>
+                    </form>
+
+                    <p class="text-center mt-3 login-footer">
+    Don’t have an account?
+    <a href="{% url 'register' %}">Register</a>
+</p>
+
+<p class="text-center">
+    <a href="{% url 'forgot_password' %}" class="forgot-link">
+        Forgot Password?
+    </a>
+</p>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+function toggleLoginPass(){
+    let input = document.getElementById("loginPass");
+    let icon = event.target;
+
+    if(input.type === "password"){
+        input.type = "text";
+        icon.textContent = "🙈";
+    }else{
+        input.type = "password";
+        icon.textContent = "👁";
+    }
+}
+</script>
+
+{% endblock %}

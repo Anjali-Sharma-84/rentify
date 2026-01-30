@@ -1,0 +1,455 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}List Clothes | Rentify{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/list.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container py-5">
+
+{% if not user.is_authenticated %}
+<!-- ================= NOT LOGGED IN ================= -->
+<div class="text-center">
+    <h1 class="fw-bold mb-3">List Your Clothes on Rentify</h1>
+    <p class="text-muted mb-4">
+        Earn money by renting your clothes to thousands of users.
+    </p>
+
+    <a href="{% url 'login' %}" class="btn btn-danger px-4 me-2">Login</a>
+    <a href="{% url 'register' %}" class="btn btn-outline-danger px-4">
+        Register as Seller
+    </a>
+</div>
+
+{% else %}
+<!-- ================= SELLER DASHBOARD ================= -->
+
+<!-- HEADER -->
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h4 class="fw-bold mb-0">Your Listed Clothes</h4>
+
+    <button class="btn btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#addClothModal">
+        + Add New Cloth
+    </button>
+</div>
+
+<!-- ================= ADD CLOTH MODAL ================= -->
+<div class="modal fade" id="addClothModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">List a New Cloth</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 pb-4">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% if form.errors %}
+                    <div class="alert alert-danger small mb-3">
+                        Please fix the errors below.
+                    </div>
+                    {% endif %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                           <label class="form-label">Categories</label>
+<div class="checkboxselectmultiple">
+    {{ form.categories }}
+</div>
+
+{% if form.categories.errors %}
+    <div class="text-danger small">
+        {{ form.categories.errors.0 }}
+    </div>
+{% endif %}
+
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Cloth Name</label>
+                            {{ form.name }}
+                            {% if form.name.errors %}
+                                <div class="text-danger small">
+                                    {{ form.name.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Cloth Image</label>
+                        {{ form.image }}
+                        {% if form.image.errors %}
+                            <div class="text-danger small">
+                                {{ form.image.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Quantity</label>
+                            {{ form.quantity }}
+                            {% if form.quantity.errors %}
+                                <div class="text-danger small">
+                                    {{ form.quantity.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Rent per day (₹)</label>
+                            {{ form.rent_per_day }}
+                            {% if form.rent_per_day.errors %}
+                                <div class="text-danger small">
+                                    {{ form.rent_per_day.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Condition</label>
+                        {{ form.condition }}
+                        {% if form.condition.errors %}
+                            <div class="text-danger small">
+                                {{ form.condition.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        {{ form.description }}
+                        {% if form.description.errors %}
+                            <div class="text-danger small">
+                                {{ form.description.errors.0 }}
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    <button type="submit" class="btn btn-danger w-100">
+                        Add Cloth
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- ================= CATEGORY FILTER ================= -->
+<div class="category-filter mb-4">
+    <a href="?category=all"
+       class="filter-pill {% if selected_category == 'all' %}active{% endif %}">
+        All
+    </a>
+
+    {% for cat in categories %}
+    <a href="?category={{ cat.id }}"
+       class="filter-pill {% if selected_category == cat.id|stringformat:'s' %}active{% endif %}">
+        {{ cat.name }}
+    </a>
+    {% endfor %}
+</div>
+
+<!-- ================= LISTED CLOTHES ================= -->
+<div class="row g-4 mt-2 cloth-grid">
+{% for cloth in clothes %}
+<div class="col-lg-3 col-md-4 col-sm-6">
+
+    <div class="card cloth-card border-0 shadow-sm"
+         data-bs-toggle="modal"
+         data-bs-target="#viewClothModal{{ cloth.id }}">
+
+        <!-- IMAGE WRAPPER -->
+       <div class="cloth-image-wrapper">
+    <img src="{{ cloth.image.url }}"
+         alt="{{ cloth.name }}"
+         loading="lazy"
+         onload="this.classList.add('loaded')"
+         onerror="this.style.display='none'">
+
+   
+</div>
+
+        <div class="card-body">
+            <h6 class="cloth-title">{{ cloth.name }}</h6>
+
+            <p class="cloth-category mb-1">
+                {{ cloth.category.name }}
+            </p>
+
+            <p class="cloth-price">
+                ₹{{ cloth.rent_per_day }} <span>/ day</span>
+            </p>
+            {% if cloth.is_available %}
+    <span class="badge availability-pill bg-success">
+        Available
+    </span>
+{% else %}
+    <span class="badge availability-pill bg-secondary">
+        Unavailable
+    </span>
+{% endif %}
+
+            <!-- ACTION ICONS -->
+            <div class="card-actions"
+                 onclick="event.stopPropagation();">
+                <button title="Edit"
+                        data-bs-toggle="modal"
+                        data-bs-target="#editClothModal{{ cloth.id }}">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+
+                <button title="Delete"
+                        data-bs-toggle="modal"
+                        data-bs-target="#deleteClothModal{{ cloth.id }}">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= EDIT CLOTH MODAL ================= -->
+<div class="modal fade" id="editClothModal{{ cloth.id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">Edit Cloth</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body px-4 pb-4">
+                <form method="post" enctype="multipart/form-data"
+                      action="{% url 'edit_cloth' cloth.id %}">
+                    {% csrf_token %}
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <div class="col-md-6 mb-2">
+    <label class="form-label">Categories</label>
+
+    <div class="checkboxselectmultiple">
+        {% for cat in categories %}
+        <div class="form-check">
+            <input class="form-check-input"
+                   type="checkbox"
+                   name="categories"
+                   value="{{ cat.id }}"
+                   id="edit-cat-{{ cloth.id }}-{{ cat.id }}"
+                   {% if cat in cloth.categories.all %}checked{% endif %}>
+
+            <label class="form-check-label"
+                   for="edit-cat-{{ cloth.id }}-{{ cat.id }}">
+                {{ cat.name }}
+            </label>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Cloth Name</label>
+                            <input type="text" name="name"
+                                   class="form-control"
+                                   value="{{ cloth.name }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Change Image</label>
+                        <input type="file" name="image" class="form-control">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Quantity</label>
+                            <input type="number" name="quantity"
+                                   class="form-control"
+                                   value="{{ cloth.quantity }}">
+                        </div>
+
+                        <div class="col-md-6 mb-2">
+                            <label class="form-label">Rent per day (₹)</label>
+                            <input type="number" name="rent_per_day"
+                                   class="form-control"
+                                   value="{{ cloth.rent_per_day }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-2">
+                        <label class="form-label">Condition</label>
+                        <select name="condition" class="form-select">
+                            {% for key, value in cloth.CONDITION_CHOICES %}
+                            <option value="{{ key }}"
+                              {% if cloth.condition == key %}selected{% endif %}>
+                              {{ value }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Description</label>
+                        <textarea name="description"
+                                  class="form-control"
+                                  rows="3">{{ cloth.description }}</textarea>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Update Cloth
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- ================= DELETE CLOTH MODAL ================= -->
+<div class="modal fade" id="deleteClothModal{{ cloth.id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold text-danger">
+                    Delete Cloth
+                </h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body text-center px-4">
+                <p class="mb-2">
+                    Are you sure you want to delete
+                    <strong>{{ cloth.name }}</strong>?
+                </p>
+                <p class="text-muted small">
+                    This action cannot be undone.
+                </p>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button type="button"
+                        class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Cancel
+                </button>
+
+                <form method="post"
+                      action="{% url 'delete_cloth' cloth.id %}">
+                    {% csrf_token %}
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Yes, Delete
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+
+
+<!-- ================= VIEW CLOTH MODAL ================= -->
+<div class="modal fade" id="viewClothModal{{ cloth.id }}" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">{{ cloth.name }}</h5>
+                <button type="button" class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-5">
+                        <img src="{{ cloth.image.url }}"
+                             class="img-fluid rounded"
+                             alt="{{ cloth.name }}">
+                    </div>
+
+                    <div class="col-md-7">
+                        <p>
+    <strong>Categories:</strong>
+    {% for cat in cloth.categories.all %}
+        {{ cat.name }}{% if not forloop.last %}, {% endif %}
+    {% endfor %}
+</p>
+
+                        <p><strong>Condition:</strong> {{ cloth.get_condition_display }}</p>
+                        <p><strong>Quantity:</strong> {{ cloth.quantity }}</p>
+                        <p><strong>Rent per day:</strong>
+                            <span class="text-danger fw-bold">
+                                ₹{{ cloth.rent_per_day }}
+                            </span>
+                        </p>
+                        <p><strong>Status:</strong>
+                            {% if cloth.is_available %}
+                                <span class="badge bg-success">Available</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Not Available</span>
+                            {% endif %}
+                        </p>
+
+                        {% if cloth.description %}
+                        <p class="mt-3">
+                            <strong>Description:</strong><br>
+                            {{ cloth.description }}
+                        </p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0">
+                <button class="btn btn-outline-secondary"
+                        data-bs-dismiss="modal">
+                    Close
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% empty %}
+<div class="col-12 text-center text-muted">
+    You haven’t listed any clothes yet.
+</div>
+{% endfor %}
+</div>
+
+{% endif %}
+</div>
+
+<!-- AUTO OPEN ADD MODAL IF ERRORS -->
+{% if form.errors %}
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    new bootstrap.Modal(
+        document.getElementById("addClothModal")
+    ).show();
+});
+</script>
+{% endif %}
+{% endblock %}
+

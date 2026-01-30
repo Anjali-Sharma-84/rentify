@@ -1,0 +1,307 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Seller Dashboard | Rentify{% endblock %}
+
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/seller.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container py-5">
+
+    <!-- ================= SELLER PROFILE ================= -->
+<div class="row g-4 mb-5">
+
+    <!-- SELLER INFO -->
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body">
+
+                <h5 class="fw-bold mb-1">
+                    {{ profile.store_name }}
+                </h5>
+
+                {% if profile.is_verified %}
+                    <span class="badge bg-success mb-3">
+                        Verified Seller
+                    </span>
+                {% else %}
+                    <span class="badge bg-secondary mb-3">
+                        Not Verified
+                    </span>
+                {% endif %}
+
+                <hr>
+
+                <p class="small mb-1">
+                    📧 {{ request.user.email }}
+                </p>
+
+                {% if request.user.contact %}
+                <p class="small mb-1">
+                    📞 {{ request.user.contact }}
+                </p>
+                {% endif %}
+
+                {% if address %}
+                    <p class="small mb-1">
+                        📍 {{ address.building }}
+                    </p>
+                    <p class="small text-muted mb-0">
+                        {{ address.taluka }},
+                        {{ address.city }},
+                        {{ address.state }} – {{ address.pincode }}
+                    </p>
+                {% else %}
+                    <p class="text-muted small">
+                        Pickup address not added
+                    </p>
+                {% endif %}
+            <button class="btn btn-sm btn-outline-primary mt-3"
+        data-bs-toggle="modal"
+        data-bs-target="#editSellerProfileModal">
+    Edit Profile
+</button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- MAP -->
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm rounded-4 h-100">
+            <div class="card-body p-0">
+
+                {% if full_address %}
+                <iframe
+                    width="100%"
+                    height="320"
+                    style="border:0;border-radius:16px"
+                    loading="lazy"
+                    src="https://www.google.com/maps?q={{ full_address|urlencode }}&output=embed">
+                </iframe>
+                {% else %}
+                <div class="p-4 text-center text-muted">
+                    Location not available
+                </div>
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<!-- ================= EDIT SELLER PROFILE MODAL ================= -->
+<div class="modal fade" id="editSellerProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow rounded-4">
+
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    Edit Seller Profile
+                </h5>
+                <button type="button"
+                        class="btn-close"
+                        data-bs-dismiss="modal"></button>
+            </div>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="update_profile">
+
+                <div class="modal-body">
+
+                    <h6 class="fw-semibold mb-2">Store Details</h6>
+                    {{ profile_form.store_name }}
+
+                    <hr>
+
+                    <h6 class="fw-semibold mb-2">Pickup Address</h6>
+                    {{ address_form.building }}
+                    {{ address_form.taluka }}
+                    {{ address_form.city }}
+                    {{ address_form.state }}
+                    {{ address_form.pincode }}
+
+                </div>
+
+                <div class="modal-footer border-0">
+                    <button type="button"
+                            class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">
+                        Close
+                    </button>
+
+                    <button type="submit"
+                            class="btn btn-danger">
+                        Save Changes
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+</div>
+
+    <!-- HEADER -->
+    <div class="mb-4">
+        <h3 class="fw-bold">Rental Requests</h3>
+        <p class="text-muted">
+            Manage incoming rental requests from buyers
+        </p>
+    </div>
+
+    <div class="row g-4">
+
+        {% for req in requests %}
+        <div class="col-lg-4 col-md-6">
+
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+
+                <!-- CARD BODY -->
+                <div class="card-body d-flex flex-column">
+
+                    <!-- TOP -->
+                    <div class="d-flex align-items-start gap-3 mb-3">
+
+                        <img src="{{ req.cloth.image.url }}"
+                             class="rounded"
+                             style="width:80px;height:80px;object-fit:cover;">
+
+                        <div class="flex-grow-1">
+                            <h6 class="fw-bold mb-1">
+                                {{ req.cloth.name }}
+                            </h6>
+
+                            <p class="small text-muted mb-0">
+                                Buyer: {{ req.buyer.username }}
+                            </p>
+                        </div>
+
+                        <!-- STATUS BADGE -->
+                        <span class="badge
+                            {% if req.status == 'pending' %}bg-warning
+                            {% elif req.status == 'approved' %}bg-success
+                            {% elif req.status == 'rejected' %}bg-danger
+                            {% elif req.status == 'completed' %}bg-primary
+                            {% else %}bg-secondary{% endif %}">
+                            {{ req.status|title }}
+                        </span>
+                    </div>
+
+                    <!-- DETAILS -->
+                    <div class="small text-muted mb-2">
+                        Quantity: <strong>{{ req.quantity }}</strong><br>
+                        Dates: {{ req.start_date }} → {{ req.end_date }}
+                    </div>
+
+                    <div class="fw-semibold mb-2">
+                        ₹{{ req.total_price }}
+                        <span class="text-muted small">({{ req.quantity }} × days)</span>
+                    </div>
+
+                    <!-- PAYMENT -->
+                    <div class="mb-3">
+                        <span class="badge bg-light text-dark">
+                            Cash
+                        </span>
+
+                        <span class="badge
+                            {% if req.payment_status == 'paid' %}bg-success
+                            {% else %}bg-secondary{% endif %}">
+                            {{ req.payment_status|title }}
+                        </span>
+                    </div>
+
+                    <!-- ACTIONS -->
+                    <!-- ACTIONS -->
+<!-- ACTIONS -->
+<div class="mt-auto d-flex gap-2 flex-wrap">
+
+    {% if req.status == "pending" %}
+
+        <!-- ACCEPT -->
+        <a href="{% url 'accept_rent' req.id %}"
+           class="btn btn-sm btn-success w-100">
+            Accept
+        </a>
+
+        <!-- REJECT -->
+        <a href="{% url 'reject_rent' req.id %}"
+           class="btn btn-sm btn-outline-danger w-100">
+            Reject
+        </a>
+
+        <!-- CANCEL -->
+        <form method="post"
+              action="{% url 'cancel_rent_request' req.id %}"
+              class="w-100">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-sm btn-outline-secondary w-100">
+                Cancel
+            </button>
+        </form>
+
+    {% elif req.status == "approved" %}
+
+        <!-- CANCEL (EVEN AFTER APPROVED) -->
+        <form method="post"
+              action="{% url 'cancel_rent_request' req.id %}"
+              class="w-100">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-sm btn-outline-danger w-100">
+                Cancel
+            </button>
+        </form>
+
+        {% if req.payment_status == "pending" %}
+            <a href="{% url 'mark_paid' req.id %}"
+               class="btn btn-sm btn-warning w-100">
+                Mark Cash Paid
+            </a>
+        {% else %}
+            <a href="{% url 'complete_rental' req.id %}"
+               class="btn btn-sm btn-primary w-100">
+                Complete Rental
+            </a>
+        {% endif %}
+
+    {% elif req.status == "cancelled" or req.status == "rejected" %}
+
+        <!-- DELETE -->
+        <form method="post"
+              action="{% url 'delete_rent_request' req.id %}"
+              class="w-100">
+            {% csrf_token %}
+            <button type="submit"
+                    class="btn btn-sm btn-danger w-100">
+                Delete
+            </button>
+        </form>
+
+    {% endif %}
+
+
+
+</div>
+
+
+                </div>
+            </div>
+        </div>
+
+        {% empty %}
+        <div class="col-12 text-center text-muted">
+            No rental requests yet.
+        </div>
+        {% endfor %}
+
+    </div>
+</div>
+{% endblock %}

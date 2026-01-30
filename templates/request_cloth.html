@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Request Rent | Rentify{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/requestcloth.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container py-5">
+<div class="row g-4 align-items-stretch">
+
+<!-- ================= CLOTH SUMMARY ================= -->
+<div class="col-md-5">
+  <div class="card p-4 shadow-sm border-0 h-100 rent-card">
+    <h6 class="fw-bold mb-3 section-title">
+        Cloth Details
+    </h6>
+        <img src="{{ cloth.image.url }}"
+             class="img-fluid rounded mb-3">
+
+        <h5 class="fw-bold">{{ cloth.name }}</h5>
+
+        <p class="text-danger fw-bold mb-1">
+            ₹{{ cloth.rent_per_day }} / day
+        </p>
+
+        <p class="text-muted mb-0">
+            Available Stock: {{ cloth.quantity }}
+        </p>
+    </div>
+</div>
+<!-- ================= SELLER PICKUP LOCATION ================= -->
+
+
+
+<!-- ================= RENT FORM ================= -->
+<div class="col-md-7">
+    <div class="card p-4 shadow-sm border-0 h-100 rent-card">
+    <h6 class="fw-bold mb-3 section-title">
+        Rent Details
+    </h6>
+
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- QUANTITY -->
+            <div class="mb-3">
+                <label class="form-label">Quantity</label>
+                <input type="number"
+                       name="quantity"
+                       class="form-control"
+                       min="1"
+                       max="{{ cloth.quantity }}"
+                       required>
+            </div>
+
+            <!-- DATES -->
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date"
+                           name="start_date"
+                           class="form-control"
+                           min="{{ today }}"
+                           required>
+                </div>
+
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date"
+                           name="end_date"
+                           class="form-control"
+                           min="{{ today }}"
+                           required>
+                </div>
+            </div>
+
+            <!-- PICKUP DATE -->
+            <div class="mb-3">
+                <label class="form-label">Pickup Date & Time</label>
+                <input type="datetime-local"
+                       name="buyer_requested_pickup_date"
+                       class="form-control">
+            </div>
+
+            <!-- NOTE -->
+            <div class="mb-3">
+                <label class="form-label">Note</label>
+                <textarea name="buyer_note"
+                          class="form-control"
+                          rows="3"
+                          placeholder="Any special instructions (optional)"></textarea>
+            </div>
+
+            <!-- INFO NOTE -->
+            <div class="alert alert-light border small">
+                <strong>Note:</strong><br>
+                Total price and rental duration will be calculated
+                automatically after submission.
+            </div>
+
+            <button class="btn btn-danger w-100">
+                Send Rent Request
+            </button>
+        </form>
+
+    </div>
+</div>
+
+</div>
+
+<div class="card border-0 shadow-sm rounded-4 mt-4">
+    <div class="card-body">
+
+        <h6 class="fw-bold mb-2">
+            Pickup Location
+        </h6>
+
+        {% if seller_profile %}
+        <p class="mb-1 fw-semibold">
+            {{ seller_profile.store_name }}
+        </p>
+        {% endif %}
+
+        {% if address %}
+        <p class="text-muted small mb-3">
+            📍 {{ address.building }},
+            {{ address.city }},
+            {{ address.taluka }},
+            {{ address.state }} – {{ address.pincode }}
+        </p>
+
+        <div class="rounded-4 overflow-hidden">
+            <iframe
+                width="100%"
+                height="250"
+                style="border:0"
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                src="https://www.google.com/maps?q={{ full_address|urlencode }}&output=embed">
+            </iframe>
+        </div>
+        {% else %}
+        <p class="text-muted small">
+            Pickup address not available.
+        </p>
+        {% endif %}
+
+    </div>
+</div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+/* =========================
+   LOGIN PAGE ONLY
+========================= */
+
+.login-wrapper {
+margin-top: 30px;
+    background: #fff5f6;
+}
+
+/* Card */
+.login-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 40px 36px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+/* Title */
+.login-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 700;
+    color: #e63946;
+    text-align: center;
+    margin-bottom: 6px;
+}
+
+/* Subtitle */
+.login-subtitle {
+    font-size: 14px;
+    color: #6b7280;
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+/* Labels */
+.login-card label {
+    font-size: 13px;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 6px;
+}
+
+/* Inputs */
+.login-input {
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 14px;
+    border: 1px solid #e5e7eb;
+}
+
+.login-input:focus {
+    border-color: #e63946;
+    box-shadow: 0 0 0 0.15rem rgba(230, 57, 70, 0.2);
+}
+
+/* Login button */
+.login-card .rentify-btn {
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+/* Footer text */
+.login-footer {
+    font-size: 14px;
+    color: #6b7280;
+}
+
+.login-footer a {
+    color: #e63946;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.login-footer a:hover {
+    text-decoration: underline;
+}
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 768px) {
+    .login-wrapper {
+        padding: 50px 16px;
+    }
+
+    .login-card {
+        padding: 32px 24px;
+    }
+
+    .login-title {
+        font-size: 26px;
+    }
+}
+.forgot-link {
+    font-size: 14px;
+    color: #ff3b5c;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.forgot-link:hover {
+    text-decoration: underline;
+}
+.eye-btn-login{
+    position:absolute;
+    right:15px;
+    top:38px;
+    cursor:pointer;
+    font-size:18px;
+}

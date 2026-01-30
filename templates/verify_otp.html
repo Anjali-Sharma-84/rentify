@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Verify OTP{% endblock %}
+
+{% block nav %}{% endblock nav %}
+
+{% block content %}
+<div class="container d-flex justify-content-center align-items-center">
+  <div class="col-md-5">
+    <div class="card shadow-lg p-4 rounded-4">
+         <a href="{% url 'login' %}" class="close-btn">×</a>
+
+      <h3 class="text-center text-danger fw-bold">Verify OTP</h3>
+      <p class="text-center text-muted">Check your email for OTP</p>
+
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label>OTP</label>
+          <input type="text" name="otp" class="form-control rounded-pill" placeholder="Enter 6-digit OTP" required>
+        </div>
+
+        <button class="btn btn-danger w-100 rounded-pill">Verify OTP</button>
+      </form>
+
+    </div>
+  </div>
+</div>
+{% endblock %}

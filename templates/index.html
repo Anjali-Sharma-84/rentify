@@ -1,0 +1,217 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Rentify | Style Without Commitment{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet" href="{% static 'css/index.css' %}">
+{% endblock css %}
+
+{% block content %}
+
+<!-- ================= HERO SECTION ================= -->
+<section class="hero-section">
+    <div class="container pt-5">
+        <div class="row align-items-center">
+
+            <div class="col-lg-8">
+                <h1 class="hero-title">
+                    Style Without the<br>
+                    <span>Commitment</span>
+                </h1>
+
+                <p class="hero-text">
+                    Rent premium designer outfits for every occasion.
+                    Sustainable, affordable, and effortlessly stylish.
+                </p>
+
+                <div class="hero-actions">
+                    <a href="{% url 'rent_clothes' %}" class="btn rentify-btn me-3">
+                        Browse Collection
+                    </a>
+                    <a href="{% url 'list_clothes' %}" class="btn rentify-btn-outline">
+                        Become a Seller
+                    </a>
+                </div>
+            </div>
+
+            <div class="col-lg-4 text-center">
+                <img src="{% static 'images/hero.jpg' %}"
+                     alt="Fashion"
+                     class="hero-image">
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<section class="about-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-4 text-center">
+                <img src="{% static 'images/about.jpeg' %}"
+                     alt="About Rentify"
+                     class="about-image">
+            </div>
+            <!-- TEXT -->
+            <div class="ps-4 col-lg-8 mb-4 mb-lg-0">
+                <h2 class="section-heading">About Rentify</h2>
+                <p class="about-text">
+                    Rentify is a fashion rental platform that lets you
+                    <strong>rent premium outfits</strong> without buying them.
+                    Whether it’s a wedding, party, or special occasion — wear
+                    designer clothes without long-term commitment.
+                </p>
+
+                <p class="about-text">
+                    Unlike traditional delivery platforms, Rentify follows a
+                    <strong>pickup-based model</strong>.
+                    You simply choose an outfit online and collect it directly
+                    from the seller’s store or wardrobe.
+                </p>
+
+                <ul class="about-points">
+                    <li>✔ Affordable & sustainable fashion</li>
+                    <li>✔ No delivery hassles – pickup only</li>
+                    <li>✔ Shops & individuals can list clothes</li>
+                </ul>
+            </div>
+
+            <!-- IMAGE -->
+            
+
+        </div>
+    </div>
+</section>
+
+<!-- ================= TRUST SECTION ================= -->
+<section class="trust-section">
+    <div class="container">
+        <div class="row text-center g-4">
+
+            <div class="col-6 col-md-3">
+                <h3 class="trust-number">10K+</h3>
+                <p class="trust-text">Happy Renters</p>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <h3 class="trust-number">5K+</h3>
+                <p class="trust-text">Verified Sellers</p>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <h3 class="trust-number">25K+</h3>
+                <p class="trust-text">Outfits Rented</p>
+            </div>
+
+            <div class="col-6 col-md-3">
+                <h3 class="trust-number">4.8 ★</h3>
+                <p class="trust-text">Average Rating</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="how-section">
+    <div class="container">
+        <h2 class="section-heading">How Rentify Works</h2>
+        <p class="section-subtitle">
+            Simple, transparent, and pickup-based fashion renting.
+        </p>
+
+        <div class="row g-4 mt-4">
+
+            <!-- Step 1 -->
+            <div class="col-md-4">
+                <div class="how-card">
+                    <span class="step-number">1</span>
+                    <h5>Browse & Select</h5>
+                    <p>
+                        Explore premium outfits listed by nearby sellers and
+                        choose the style that fits your occasion.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="col-md-4">
+                <div class="how-card">
+                    <span class="step-number">2</span>
+                    <h5>Visit & Pickup</h5>
+                    <p>
+                        Once confirmed, visit the seller’s store and
+                        personally pick up your outfit.
+                        No shipping involved.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Step 3 -->
+            <div class="col-md-4">
+                <div class="how-card">
+                    <span class="step-number">3</span>
+                    <h5>Wear & Return</h5>
+                    <p>
+                        Enjoy your look for the occasion and return the outfit
+                        back to the store after use.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+
+<!-- ================= CATEGORIES ================= -->
+<section class="category-section">
+    <div class="container">
+
+        <h2 class="section-heading">Popular Categories</h2>
+
+        <div class="row mt-4">
+
+            <div class="col-md-3">
+                <div class="category-card">Party Wear</div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">Wedding</div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">Ethnic</div>
+            </div>
+
+            <div class="col-md-3">
+                <div class="category-card">Casual</div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+
+
+<!-- ================= CTA ================= -->
+<section class="cta-section">
+    <div class="container text-center">
+        <h2>Earn From Clothes You Own</h2>
+        <p>List even a single outfit and let people pick it up near you.</p>
+
+        <a href="{% url 'list_clothes' %}" class="btn rentify-btn mt-3">
+            Start Listing Clothes
+        </a>
+    </div>
+</section>
+
+
+{% endblock %}
